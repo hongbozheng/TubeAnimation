@@ -11,7 +11,7 @@ import UIKit
 private  let screenWidth = UIScreen.main.bounds.width
 private let screenHeight = UIScreen.main.bounds.height
 private let tubeViewHeight = CGFloat(200)
-class ViewController: UIViewController,UIScrollViewDelegate {
+class ViewController: UIViewController,UIScrollViewDelegate ,TubeAnimationControlDelegate{
     
   private lazy var scrollView:UIScrollView = {
       let tmpsv = UIScrollView(frame: CGRect(x: 0, y: tubeViewHeight, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - tubeViewHeight))
@@ -54,14 +54,19 @@ class ViewController: UIViewController,UIScrollViewDelegate {
         self.view.addSubview(scrollView)
         scrollView.addSubview(firstBtn)
         scrollView.addSubview(secondBtn)
-        
+        indicateView.animationControlDelegate = self
            }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
        
     }
-    
-    
+    //TubeAnimationControlDelegate
+    func didTurnedToFirstPage() {
+        print("First page")
+    }
+    func didTurnedToSecondPage() {
+        print("Second page")
+    }
    @objc private  func turnToFirstPage() {
         scrollView.setContentOffset(CGPoint.init(x: 0, y: 0), animated: true)
           indicateView.turnToFirstPage()

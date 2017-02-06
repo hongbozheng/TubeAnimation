@@ -97,6 +97,7 @@ class TubeAnimationView: UIView {
     
     func animationDidfinish()  {
         displayLink?.invalidate()
+        displayLink = nil
     }
     
     override init(frame: CGRect) {
@@ -301,7 +302,10 @@ class TubeAnimationView: UIView {
                     if towardsType == .TowardRight {
                         if delegate != nil{
                             delegate?.didTurnedToRight()
-                          //   delegate?.didTurnedToLeft()
+                        }
+                    }else{
+                        if delegate != nil{
+                               delegate?.didTurnedToLeft()
                         }
                     }
                 }

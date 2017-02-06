@@ -20,6 +20,15 @@ class IndicateView: UIView {
     }
     */
     
+    var animationControlDelegate:TubeAnimationControlDelegate? {
+        get{
+            return animationControl.delegate
+        }
+        set{
+         animationControl.delegate = newValue
+        }
+    }
+    
     private lazy var imageView:UIImageView = {
         let tmpImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
          tmpImageView.image = UIImage(named: "assetbg")
@@ -53,6 +62,7 @@ class IndicateView: UIView {
         
         self.addSubview(imageView)
         self.addSubview(animationControl)
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
