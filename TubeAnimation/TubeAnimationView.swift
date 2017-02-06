@@ -148,7 +148,7 @@ class TubeAnimationView: UIView {
     
     private func initShape(){
         let frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
-        let color = UIColor.purple
+        let color = UIColor.white
         leftSemiShape.frame = frame
         leftSemiShape.fillColor = color.cgColor
         volcanoShape.frame = frame
