@@ -43,7 +43,7 @@ class IndicateView: UIView {
         if !animationControl.origin {
             return
         }
-        animationControl.turnToSecondePage()
+        animationControl.turnToSecondPage()
     }
    
     

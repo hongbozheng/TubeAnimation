@@ -74,14 +74,14 @@ class TubeAnimationControl: UIView,TubeAnimationViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func turnToSecondePage() {
+    func turnToFirstPage() {
         narrowView.chosen_d = 0.001
         narrowView.isHidden = true
         opNarrowView.chosen_d = Double(self.frame.width)/2
         opNarrowView.isHidden = false
     }
     
-    func turnToFirstPage() {
+    func turnToSecondPage() {
         narrowView.chosen_d = Double(self.frame.width)/2
         narrowView.isHidden = false
         opNarrowView.chosen_d = 0.001

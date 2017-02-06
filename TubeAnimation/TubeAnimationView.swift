@@ -66,7 +66,7 @@ class TubeAnimationView: UIView {
     private var dynamic_Q2_d = 0.0
     private var pointOx = 0.0
     
-    private var displayLink = CADisplayLink()
+    private var displayLink : CADisplayLink? = nil
     
     var _chosen_d:Double = 0.0
     var chosen_d:Double {
@@ -78,8 +78,12 @@ class TubeAnimationView: UIView {
           _chosen_d = newValue
             d = 0.0
             initParams()
+            if displayLink != nil {
+                displayLink?.invalidate()
+                displayLink = nil
+            }
             displayLink = CADisplayLink(target: self, selector: #selector(changeParamManually))
-            displayLink.add(to:RunLoop.main, forMode: .commonModes)
+            displayLink?.add(to:RunLoop.main, forMode: .commonModes)
         }
        }
 
@@ -92,7 +96,7 @@ class TubeAnimationView: UIView {
     }
     
     func animationDidfinish()  {
-        displayLink.invalidate()
+        displayLink?.invalidate()
     }
     
     override init(frame: CGRect) {
@@ -111,6 +115,7 @@ class TubeAnimationView: UIView {
         r1 = Double(self.frame.height/2) - 4
         r2 = r1/2
         a = 27.0
+        d = 0.0
         increment = 2.0
         mainRect_w = r1*2
         pointOx = r1 + mainRect_w + 5
@@ -132,6 +137,9 @@ class TubeAnimationView: UIView {
         pointC = CGPoint(x:  Double(pointP.x), y:  Double(pointP.y) + r2)
         tube_h = 2*( Double(pointO.y) -  Double(pointC.y))
         pointD = CGPoint(x:  Double(pointC.x), y:  Double(pointC.y)+tube_h)
+        
+        dynamic_Q_d = 0.0
+        dynamic_Q2_d = 0.0
         
         uber_rate = 2.5
         tube_rate = 6.0
@@ -263,7 +271,7 @@ class TubeAnimationView: UIView {
         
         pointQ2 = CGPoint(x:Double(pointO.x) + dynamic_Q2_d,y:Double(pointO.y))
         
-        if (dynamic_Q2_d <= uber_w)
+        if (dynamic_Q_d <= uber_w)
         {
             dynamic_Q_d += uber_rate * increment;
         }
@@ -380,18 +388,23 @@ class TubeAnimationView: UIView {
 
         let tailPath = UIBezierPath()
         if d <= mainRect_w{
-            tailPath.addArc(withCenter: pointO2, radius: CGFloat(r1), startAngle:CGFloat(0.0*M_PI) , endAngle: CGFloat(2*M_PI), clockwise: true)
+            tailPath.addArc(withCenter: pointO, radius: CGFloat(r1), startAngle:CGFloat(0.0*M_PI) , endAngle: CGFloat(2.0*M_PI), clockwise: true)
 
         }else if (dynamic_Q2_d <= uber_w) {
+        
             let temC = atan((Double(pointP.x - pointO.x) - dynamic_Q2_d)/Double(pointO.y - pointP.y))*180/M_PI
             let temR3 = Double(pointO.y - pointP.y)/cos(temC/180*M_PI) - r2
-            tailPath.addArc(withCenter: pointQ2, radius: CGFloat(temR3), startAngle:CGFloat(0.0*M_PI) , endAngle: CGFloat(2*M_PI), clockwise: true)
+            tailPath.addArc(withCenter: pointQ2, radius: CGFloat(temR3), startAngle:CGFloat(0.0*M_PI) , endAngle: CGFloat(2.0*M_PI), clockwise: true)
+ 
         }else if dynamic_Q2_d <= uber_w + tube_w   {
-             tailPath.addArc(withCenter:  CGPoint(x: Double(pointQ.x) + dynamic_Q2_d, y: Double(pointO.y)), radius: CGFloat(tube_h/2), startAngle:CGFloat(0.0*M_PI) , endAngle: CGFloat(2*M_PI), clockwise: true)
+            let tmp_pointQ = CGPoint(x: Double(pointO.x) + dynamic_Q2_d, y: Double(pointO.y))
+            
+             tailPath.addArc(withCenter:tmp_pointQ, radius: CGFloat(tube_h/2), startAngle:CGFloat(0.0*M_PI) , endAngle: CGFloat(2.0*M_PI), clockwise: true)
+
         }else if dynamic_Q2_d <= uber_w + tube_w + uber_w  {
             let temC = atan((Double(pointQ2.x - pointO.x) - uber_w - tube_w)/Double(pointO.y - pointP.y))*180/M_PI
             let temR3 = Double(pointO.y - pointP.y)/cos(temC/180*M_PI) - r2
-         tailPath.addArc(withCenter: pointQ2, radius: CGFloat(temR3), startAngle:CGFloat(0.0*M_PI) , endAngle: CGFloat(2*M_PI), clockwise: true)
+         tailPath.addArc(withCenter: pointQ2, radius: CGFloat(temR3), startAngle:CGFloat(0.0*M_PI) , endAngle: CGFloat(2.0*M_PI), clockwise: true)
         }
         tailCircleShape.path = tailPath.cgPath
         
